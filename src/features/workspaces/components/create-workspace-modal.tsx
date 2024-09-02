@@ -12,31 +12,28 @@ import {
 import { Input } from '@/components/ui/input';
 import { useCreateWorkspace } from '@/features/workspaces/api/use-create-workspace';
 import { useCreateWorkspaceModal } from '@/features/workspaces/store/use-create-workspace-modal';
+import { useState } from 'react';
 
 export const CreateWorkspaceModal = () => {
   const [open, setOpen] = useCreateWorkspaceModal();
+  const [name, setName] = useState('');
 
-  const { mutate } = useCreateWorkspace();
+  const { mutate, isPending } = useCreateWorkspace();
 
   const handleClose = () => {
     setOpen(false);
     //TODO: Clear form
   };
 
-  const handleSubmit = () => {
+  const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     mutate(
       {
-        name: 'Workspace 1',
+        name,
       },
       {
         onSuccess: (data) => {
           // Redirec to that workspace id
-        },
-        onError: () => {
-          // Show toast error
-        },
-        onSettled: () => {
-          // reset form
+          console.log('data', data);
         },
       },
     );
@@ -47,10 +44,11 @@ export const CreateWorkspaceModal = () => {
         <DialogHeader>
           <DialogTitle>Add a workspace</DialogTitle>
         </DialogHeader>
-        <form className="space-y-4">
+        <form onSubmit={handleSubmit} className="space-y-4">
           <Input
-            value={''}
-            disabled={false}
+            value={name}
+            onChange={(e) => setName(e.target.value)}
+            disabled={isPending}
             required
             autoFocus
             minLength={3}
