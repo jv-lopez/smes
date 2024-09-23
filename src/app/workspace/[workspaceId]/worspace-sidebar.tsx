@@ -79,7 +79,7 @@ export const WorkspaceSidebar = () => {
             key={item._id}
             id={item._id}
             label={item.user.name}
-            image={item.user.name}
+            image={item.user.image}
           />
         ))}
       </WorkspaceSection>
