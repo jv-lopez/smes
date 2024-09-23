@@ -1,4 +1,5 @@
 import { SidebarItem } from '@/app/workspace/[workspaceId]/sidebar-item';
+import { UserItem } from '@/app/workspace/[workspaceId]/user-item';
 import { WorkspaceHeader } from '@/app/workspace/[workspaceId]/workspace-header';
 import { WorkspaceSection } from '@/app/workspace/[workspaceId]/workspace-section';
 import { useGetChannels } from '@/features/channels/api/use-get-channels';
@@ -68,7 +69,20 @@ export const WorkspaceSidebar = () => {
           />
         ))}
       </WorkspaceSection>
-      {members?.map((item) => <div key={item._id}>{item.user.name}</div>)}
+      <WorkspaceSection
+        label="Direct messages"
+        hint="New direct message"
+        onNew={() => {}}
+      >
+        {members?.map((item) => (
+          <UserItem
+            key={item._id}
+            id={item._id}
+            label={item.user.name}
+            image={item.user.name}
+          />
+        ))}
+      </WorkspaceSection>
     </div>
   );
 };

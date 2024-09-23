@@ -5,9 +5,11 @@ import Link from 'next/link';
 import { IconType } from 'react-icons/lib';
 import { cva, type VariantProps } from 'class-variance-authority';
 import { cn } from '@/lib/utils';
+import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
+import { Id } from '../../../../convex/_generated/dataModel';
 
-const sidebarItemsVariants = cva(
-  'flex items-center gap-1.5 justify-start font-normal h-7 px-[18px] text-sm overflow-hidden',
+const userItemVariants = cva(
+  'flex items-center gap-1.5 justify-start font-normal h-7 px-4 text-sm overflow-hidden',
   {
     variants: {
       variant: {
@@ -21,29 +23,35 @@ const sidebarItemsVariants = cva(
   },
 );
 
-interface SidebarItemProps {
-  label: string;
-  id: string;
-  icon: LucideIcon | IconType;
-  variant?: VariantProps<typeof sidebarItemsVariants>['variant'];
+interface UserItemProps {
+  id: Id<'members'>;
+  label?: string;
+  image?: string;
+  variant?: VariantProps<typeof userItemVariants>['variant'];
 }
 
-export const SidebarItem = ({
-  label,
+export const UserItem = ({
+  label = 'Member',
   id,
-  icon: Icon,
+  image,
   variant,
-}: SidebarItemProps) => {
+}: UserItemProps) => {
   const workspaceId = useWorkspaceId();
+  const avatarFallback = label.charAt(0).toUpperCase();
   return (
     <Button
       variant="transparent"
       size="sm"
       asChild
-      className={cn(sidebarItemsVariants({ variant }))}
+      className={cn(userItemVariants({ variant }))}
     >
-      <Link href={`/workspace/${workspaceId}/channel/${id}`}>
-        <Icon className="size-3.5 mr-1 shrink-0" />
+      <Link href={`/workspace/${workspaceId}/member/${id}`}>
+        <Avatar className="size-5 rounded-md mr-1">
+          <AvatarImage className="rounded-md" src={image} />
+          <AvatarFallback className="rounded-md bg-sky-500 text-white text-xs">
+            {avatarFallback}
+          </AvatarFallback>
+        </Avatar>
         <span className="text-sm truncate">{label}</span>
       </Link>
     </Button>
